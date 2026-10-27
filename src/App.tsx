@@ -23,6 +23,9 @@ import {
 } from "lucide-react";
 import { products, type Product } from "./data/products";
 
+const assetUrl = (path: string) =>
+  `${import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`;
+
 type Cart = Record<string, number>;
 type Category = "All finds" | Product["category"];
 type Modal =
@@ -446,7 +449,7 @@ function App() {
             <div className="hero-orbit" />
             <img
               className="hero-image"
-              src="/images/hero-headphones.jpg"
+              src={assetUrl("/images/hero-headphones.jpg")}
               alt="Over-ear headphones from our everyday audio collection"
               fetchPriority="high"
             />
@@ -608,7 +611,11 @@ function App() {
                       aria-label={`View ${p.name}`}
                       onClick={() => setModal({ kind: "product", product: p })}
                     >
-                      <img src={p.image} alt={p.name} loading="lazy" />
+                      <img
+                        src={assetUrl(p.image)}
+                        alt={p.name}
+                        loading="lazy"
+                      />
                       <span className="quick-look">
                         Take a closer look <ArrowUpRight size={15} />
                       </span>
@@ -850,7 +857,10 @@ function App() {
                 className="detail-image"
                 style={{ backgroundColor: modal.product.color }}
               >
-                <img src={modal.product.image} alt={modal.product.name} />
+                <img
+                  src={assetUrl(modal.product.image)}
+                  alt={modal.product.name}
+                />
               </div>
               <div className="detail-copy">
                 <span className="eyebrow">
@@ -923,7 +933,7 @@ function App() {
                   <div className="cart-items">
                     {cartItems.map((p) => (
                       <div className="cart-item" key={p.id}>
-                        <img src={p.image} alt={p.name} />
+                        <img src={assetUrl(p.image)} alt={p.name} />
                         <div className="cart-item-info">
                           <h3>{p.name}</h3>
                           <p>{money(p.price)}</p>
