@@ -21,6 +21,22 @@ npm run build
 npm run preview -- --port 4173 --strictPort
 ```
 
+## GitHub Pages
+
+The site lives at `https://nishadofficialacc.github.io/Easycop/`. GitHub Pages must publish the compiled `dist` output, not the repository's source `index.html`; browsers cannot execute the source TypeScript file directly.
+
+In the repository's **Settings → Pages**, set **Source** to **GitHub Actions**. The `Build and deploy Easycop` workflow builds and checks pull requests, then deploys successful pushes to `main`. It builds with `/Easycop/` as Vite's base path so JavaScript, CSS, fonts, the favicon, and product images load from the project URL. Pull requests do not deploy.
+
+To reproduce that deployment locally and check it in a browser:
+
+```sh
+npm run test:pages
+```
+
+This builds the site and serves it strictly under `/Easycop/`, with requests to the domain root returning 404. The deployment tests verify that the storefront renders, assets load, and the shopping bag works. If the repository is renamed, update the base path in `test:pages` and the matching test-server path.
+
+For other static hosts, use `npm run build` and publish `dist`. A successful merge alone does not deploy a Vite app unless the hosting build is configured.
+
 ## Included
 
 - Product search, category filtering, and price sorting.
@@ -69,5 +85,7 @@ The cloud environment provides Chromium at `/usr/bin/chromium`. On another machi
 ```sh
 PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/path/to/chromium npm test
 ```
+
+If neither an override nor system Chromium is available, Playwright uses its managed browser. Install it with `npx playwright install --with-deps chromium` (also done by the GitHub Actions workflow).
 
 The test runner starts a local Vite server automatically if one is not already running. Failure screenshots and traces are saved under `test-results/`, which is ignored by Git.

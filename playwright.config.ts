@@ -1,7 +1,9 @@
 import { defineConfig } from "@playwright/test";
+import { existsSync } from "node:fs";
 
 export default defineConfig({
   testDir: "./tests",
+  testIgnore: "**/deployment.spec.ts",
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
@@ -14,7 +16,8 @@ export default defineConfig({
     screenshot: "only-on-failure",
     launchOptions: {
       executablePath:
-        process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || "/usr/bin/chromium",
+        process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ||
+        (existsSync("/usr/bin/chromium") ? "/usr/bin/chromium" : undefined),
     },
   },
   webServer: {
